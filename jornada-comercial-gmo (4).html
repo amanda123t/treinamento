@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jornada Comercial de GMO na Transformação do Cliente</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,500;0,9..40,700;0,9..40,800;1,9..40,400&family=Fraunces:opsz,wght@9..144,400;9..144,700;9..144,800&display=swap');
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f4f3ef;
+  --surface:#fff;
+  --border:#e2dfd8;
+  --border-light:#eae7e0;
+  --text:#1a1916;
+  --text-secondary:#4a473f;
+  --text-muted:#8a867c;
+
+  --phase1:#1e40af;--phase1-bg:#e8eefb;--phase1-sec:#f0f4fd;--phase1-border:#b8ccf3;
+  --phase2:#6d28d9;--phase2-bg:#eeecfb;--phase2-sec:#f3f1fd;--phase2-border:#c4b5fd;
+  --phase3:#0e7490;--phase3-bg:#e4f6f9;--phase3-sec:#edf9fb;--phase3-border:#99e0ed;
+  --phase4:#b91c1c;--phase4-bg:#fbeaea;--phase4-sec:#fdf0f0;--phase4-border:#f5a5a5;
+  --phase5:#047857;--phase5-bg:#e3f5ef;--phase5-sec:#edf8f3;--phase5-border:#86e7bf;
+  --phase6:#b45309;--phase6-bg:#fdf3e3;--phase6-sec:#fef8ee;--phase6-border:#fbc96c;
+
+  --radius:14px;
+  --radius-sm:8px;
+  --shadow:0 1px 3px rgba(0,0,0,.05),0 4px 16px rgba(0,0,0,.03);
+  --font-display:'Fraunces',Georgia,serif;
+  --font-body:'DM Sans',system-ui,sans-serif;
+}
+
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--font-body);
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.6;
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+}
+
+.header{
+  text-align:center;
+  padding:3.5rem 1.5rem 2.5rem;
+  background:var(--surface);
+  border-bottom:1px solid var(--border-light);
+  position:relative;overflow:hidden;
+}
+.header::before{
+  content:'';position:absolute;top:-60%;left:-10%;width:120%;height:120%;
+  background:radial-gradient(ellipse at 30% 0%,rgba(30,64,175,.05) 0%,transparent 60%),
+             radial-gradient(ellipse at 70% 0%,rgba(109,40,217,.05) 0%,transparent 60%);
+  pointer-events:none;
+}
+.header h1{
+  font-family:var(--font-display);
+  font-size:clamp(1.5rem,4vw,2.5rem);
+  font-weight:800;color:var(--text);
+  letter-spacing:-.02em;line-height:1.2;
+  margin-bottom:.6rem;position:relative;
+}
+.header p{
+  color:var(--text-secondary);
+  font-size:clamp(.85rem,2vw,1.02rem);
+  max-width:660px;margin:0 auto;position:relative;
+}
+
+.main{max-width:1140px;margin:0 auto;padding:2rem 1.25rem 2.5rem}
+
+.timeline-wrap{
+  margin-bottom:2rem;overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:thin;scrollbar-color:var(--border) transparent;
+  padding-bottom:4px;
+}
+.timeline-track{
+  display:flex;align-items:flex-start;justify-content:space-between;
+  position:relative;min-width:860px;padding:0 12px;
+}
+.timeline-track::before{
+  content:'';position:absolute;top:24px;left:55px;right:55px;
+  height:2px;background:var(--border);z-index:0;
+}
+.timeline-progress-bar{
+  position:absolute;top:24px;left:55px;
+  height:2px;z-index:1;border-radius:1px;
+  transition:width .5s cubic-bezier(.4,0,.2,1),background .4s;
+  width:0;
+}
+
+.step-btn{
+  position:relative;z-index:2;
+  display:flex;flex-direction:column;align-items:center;gap:.55rem;
+  background:none;border:none;cursor:pointer;
+  padding:.25rem .3rem;outline:none;
+  -webkit-tap-highlight-color:transparent;
+  max-width:135px;flex:1;
+}
+.step-num{
+  width:48px;height:48px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-weight:700;font-size:.95rem;
+  background:var(--surface);border:2.5px solid var(--border);
+  color:var(--text-muted);
+  transition:all .35s cubic-bezier(.4,0,.2,1);
+  box-shadow:0 1px 4px rgba(0,0,0,.06);
+}
+.step-num .emoji{font-size:1.15rem;line-height:1}
+.step-label{
+  font-size:.72rem;font-weight:600;color:var(--text-muted);
+  transition:color .3s;text-align:center;line-height:1.3;
+}
+.step-btn:hover .step-num{transform:translateY(-2px) scale(1.08);box-shadow:0 4px 16px rgba(0,0,0,.1)}
+.step-btn:hover .step-label{color:var(--text-secondary)}
+.step-btn:focus-visible{outline:2px solid var(--phase1);outline-offset:4px;border-radius:6px}
+
+.step-btn.active .step-num{color:#fff;transform:translateY(-3px) scale(1.12);border-width:0}
+.step-btn.active .step-label{font-weight:700}
+.step-btn[data-i="0"].active .step-num{background:var(--phase1);box-shadow:0 4px 20px rgba(30,64,175,.35)}
+.step-btn[data-i="0"].active .step-label{color:var(--phase1)}
+.step-btn[data-i="1"].active .step-num{background:var(--phase2);box-shadow:0 4px 20px rgba(109,40,217,.35)}
+.step-btn[data-i="1"].active .step-label{color:var(--phase2)}
+.step-btn[data-i="2"].active .step-num{background:var(--phase3);box-shadow:0 4px 20px rgba(14,116,144,.35)}
+.step-btn[data-i="2"].active .step-label{color:var(--phase3)}
+.step-btn[data-i="3"].active .step-num{background:var(--phase4);box-shadow:0 4px 20px rgba(185,28,28,.35)}
+.step-btn[data-i="3"].active .step-label{color:var(--phase4)}
+.step-btn[data-i="4"].active .step-num{background:var(--phase5);box-shadow:0 4px 20px rgba(4,120,87,.35)}
+.step-btn[data-i="4"].active .step-label{color:var(--phase5)}
+.step-btn[data-i="5"].active .step-num{background:var(--phase6);box-shadow:0 4px 20px rgba(180,83,9,.35)}
+.step-btn[data-i="5"].active .step-label{color:var(--phase6)}
+
+.step-btn.visited .step-num{border-color:var(--text-muted);background:var(--bg);color:var(--text-secondary)}
+
+.card-outer{min-height:480px}
+.card{
+  background:var(--surface);
+  border:1px solid var(--border-light);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  opacity:0;transform:translateY(12px);
+  transition:opacity .35s ease,transform .35s ease;
+  overflow:hidden;
+}
+.card.visible{opacity:1;transform:translateY(0)}
+
+.card-top-bar{height:4px;border-radius:var(--radius) var(--radius) 0 0}
+.card[data-c="0"] .card-top-bar{background:var(--phase1)}
+.card[data-c="1"] .card-top-bar{background:var(--phase2)}
+.card[data-c="2"] .card-top-bar{background:var(--phase3)}
+.card[data-c="3"] .card-top-bar{background:var(--phase4)}
+.card[data-c="4"] .card-top-bar{background:var(--phase5)}
+.card[data-c="5"] .card-top-bar{background:var(--phase6)}
+
+.card-header{
+  padding:1.5rem 2rem 1.1rem;
+  border-bottom:1px solid var(--border-light);
+  display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;
+}
+.card-phase-tag{
+  font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;
+  padding:.28rem .8rem;border-radius:20px;flex-shrink:0;
+}
+.card[data-c="0"] .card-phase-tag{background:var(--phase1-bg);color:var(--phase1);border:1px solid var(--phase1-border)}
+.card[data-c="1"] .card-phase-tag{background:var(--phase2-bg);color:var(--phase2);border:1px solid var(--phase2-border)}
+.card[data-c="2"] .card-phase-tag{background:var(--phase3-bg);color:var(--phase3);border:1px solid var(--phase3-border)}
+.card[data-c="3"] .card-phase-tag{background:var(--phase4-bg);color:var(--phase4);border:1px solid var(--phase4-border)}
+.card[data-c="4"] .card-phase-tag{background:var(--phase5-bg);color:var(--phase5);border:1px solid var(--phase5-border)}
+.card[data-c="5"] .card-phase-tag{background:var(--phase6-bg);color:var(--phase6);border:1px solid var(--phase6-border)}
+
+.card-title{
+  font-family:var(--font-display);
+  font-size:clamp(1.15rem,3vw,1.55rem);
+  font-weight:800;letter-spacing:-.01em;color:var(--text);
+}
+.card-body{padding:1.5rem 2rem 2rem}
+
+.section-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.sec{border-radius:var(--radius-sm);padding:1.1rem 1.2rem;transition:box-shadow .2s}
+.sec:hover{box-shadow:0 2px 10px rgba(0,0,0,.04)}
+.sec.full-width{grid-column:1/-1}
+
+.card[data-c="0"] .sec{background:var(--phase1-sec);border:1px solid var(--phase1-border)}
+.card[data-c="1"] .sec{background:var(--phase2-sec);border:1px solid var(--phase2-border)}
+.card[data-c="2"] .sec{background:var(--phase3-sec);border:1px solid var(--phase3-border)}
+.card[data-c="3"] .sec{background:var(--phase4-sec);border:1px solid var(--phase4-border)}
+.card[data-c="4"] .sec{background:var(--phase5-sec);border:1px solid var(--phase5-border)}
+.card[data-c="5"] .sec{background:var(--phase6-sec);border:1px solid var(--phase6-border)}
+
+.sec-title{font-size:.75rem;font-weight:800;text-transform:uppercase;letter-spacing:.8px;margin-bottom:.5rem}
+.card[data-c="0"] .sec-title{color:var(--phase1)}
+.card[data-c="1"] .sec-title{color:var(--phase2)}
+.card[data-c="2"] .sec-title{color:var(--phase3)}
+.card[data-c="3"] .sec-title{color:var(--phase4)}
+.card[data-c="4"] .sec-title{color:var(--phase5)}
+.card[data-c="5"] .sec-title{color:var(--phase6)}
+
+.sec p,.sec li{font-size:.88rem;color:var(--text-secondary);line-height:1.6}
+.sec ul{list-style:none;padding:0;display:flex;flex-direction:column;gap:.3rem}
+.sec li{position:relative;padding-left:1rem}
+.sec li::before{content:'';position:absolute;left:0;top:.6rem;width:5px;height:5px;border-radius:50%}
+.card[data-c="0"] .sec li::before{background:var(--phase1)}
+.card[data-c="1"] .sec li::before{background:var(--phase2)}
+.card[data-c="2"] .sec li::before{background:var(--phase3)}
+.card[data-c="3"] .sec li::before{background:var(--phase4)}
+.card[data-c="4"] .sec li::before{background:var(--phase5)}
+.card[data-c="5"] .sec li::before{background:var(--phase6)}
+.sec li em{font-style:italic;color:var(--text)}
+
+/* VIDEO SECTION — inside the card */
+.sec-video .video-wrapper{
+  border-radius:var(--radius-sm);overflow:hidden;
+  background:#111;
+}
+.sec-video video{
+  width:100%;display:block;
+  border-radius:var(--radius-sm);
+}
+
+.copy-btn{
+  display:inline-flex;align-items:center;gap:.35rem;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:6px;padding:.35rem .7rem;
+  font-size:.72rem;font-weight:600;color:var(--text-secondary);
+  cursor:pointer;transition:all .2s;margin-top:.55rem;
+  font-family:var(--font-body);
+}
+.copy-btn:hover{background:var(--bg);border-color:var(--text-muted);color:var(--text)}
+.copy-btn.copied{background:#ecfdf5;border-color:#6ee7b7;color:#059669}
+
+.card-nav{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-top:1.2rem;padding:0 .25rem;
+}
+.nav-btn{
+  background:var(--surface);border:1px solid var(--border);
+  color:var(--text);border-radius:var(--radius-sm);
+  padding:.6rem 1.2rem;font-size:.85rem;font-weight:600;
+  cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:.4rem;
+  font-family:var(--font-body);box-shadow:0 1px 3px rgba(0,0,0,.04);
+}
+.nav-btn:hover:not(:disabled){background:var(--text);color:var(--surface);border-color:var(--text)}
+.nav-btn:disabled{opacity:.35;cursor:default}
+.step-counter{font-size:.85rem;color:var(--text-muted);font-weight:600}
+
+.toast{
+  position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(20px);
+  background:var(--text);color:var(--surface);
+  padding:.65rem 1.3rem;border-radius:var(--radius-sm);
+  font-size:.82rem;font-weight:600;
+  opacity:0;transition:all .3s ease;pointer-events:none;z-index:999;
+  box-shadow:0 8px 30px rgba(0,0,0,.2);
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+@media(max-width:860px){.timeline-wrap{overflow-x:auto}}
+@media(max-width:768px){
+  .timeline-wrap{overflow:visible}
+  .timeline-track{flex-direction:column;align-items:flex-start;min-width:0;gap:0;padding:0 0 0 24px}
+  .timeline-track::before{top:24px;bottom:24px;left:47px;right:auto;width:2px;height:auto}
+  .timeline-progress-bar{top:24px;left:47px;right:auto;width:2px!important}
+  .step-btn{flex-direction:row;gap:.7rem;max-width:none;padding:.5rem .3rem}
+  .step-num{width:44px;height:44px;font-size:.88rem;flex-shrink:0}
+  .step-label{font-size:.82rem;text-align:left}
+  .card-header{padding:1.2rem 1.3rem 1rem}
+  .card-body{padding:1.2rem 1.3rem 1.5rem}
+  .section-grid{grid-template-columns:1fr}
+}
+@media(max-width:480px){
+  .header{padding:2rem 1rem 1.8rem}
+  .main{padding:1.25rem .75rem 2rem}
+  .card-body{padding:1rem}
+  .sec{padding:.9rem 1rem}
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <h1>Jornada Comercial de GMO na Transformação do Cliente</h1>
+  <p>Clique nas fases para identificar oportunidades de GMO, frases reais do cliente e como conduzir o discovery.</p>
+</header>
+
+<main class="main">
+  <div class="timeline-wrap">
+    <nav class="timeline-track" id="track" role="tablist" aria-label="Fases da jornada comercial">
+      <div class="timeline-progress-bar" id="progressBar"></div>
+    </nav>
+  </div>
+
+  <div class="card-outer" id="cardOuter" role="tabpanel" aria-live="polite">
+    <div class="card" id="card"></div>
+  </div>
+
+  <div class="card-nav">
+    <button class="nav-btn" id="prevBtn" aria-label="Fase anterior">&#8592; Anterior</button>
+    <span class="step-counter" id="stepCounter"></span>
+    <button class="nav-btn" id="nextBtn" aria-label="Próxima fase">Próxima &#8594;</button>
+  </div>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/*
+  ┌─────────────────────────────────────────────────────────┐
+  │  INSTRUÇÕES PARA OS VÍDEOS:                             │
+  │                                                         │
+  │  1. Coloque seus arquivos .mp4 na MESMA PASTA           │
+  │     deste arquivo HTML.                                 │
+  │                                                         │
+  │  2. Substitua os nomes abaixo pelo nome real            │
+  │     do seu arquivo. Exemplo:                            │
+  │     "videos/fase1-diagnostico.mp4"                      │
+  │     ou apenas "meu-video.mp4" se estiver na mesma pasta │
+  │                                                         │
+  │  3. Salve e recarregue a página.                        │
+  └─────────────────────────────────────────────────────────┘
+*/
+
+const phases = [
+  {
+    title: "Oportunidade de Transformação",
+    subtitle: "(antes do projeto existir)",
+    icon: "🔭",
+    // ▼▼▼ SUBSTITUA PELO NOME DO SEU VÍDEO DA FASE 1 ▼▼▼
+    video: "fase1-oportunidade.mp4",
+    acontecendo: "Cliente percebe oportunidade (eficiência, digitalização, redução de custo, compliance), mas ainda não estruturou projeto nem considera impacto humano.",
+    sinais: [
+      "\"A gente precisa digitalizar isso logo.\"",
+      "\"Quero melhorar eficiência, mas não sei por onde começar.\"",
+      "\"Se colocarmos SAP/automação resolve, né?\"",
+      "\"O problema é processo ou sistema? Não sei.\""
+    ],
+    risco: "Virar projeto 100% técnico, escopo mal definido, resistência futura por falta de diagnóstico e patrocínio.",
+    oportunidade: "Diagnóstico de prontidão, mapa de stakeholders, avaliação de impactos (rotina, papel, indicadores), definição de patrocínio.",
+    discovery: [
+      "Quem será mais impactado na rotina se isso mudar?",
+      "Qual mudança de comportamento você espera no time?",
+      "O que já deu errado em mudanças anteriores aqui?",
+      "Quem precisa patrocinar isso para ser prioridade real?",
+      "Quais áreas podem resistir e por quê?"
+    ],
+    posicionamento: "Explique que a tecnologia acelera, mas a adoção determina resultado. Ofereça GMO como forma de reduzir risco e encurtar tempo até capturar valor, antes mesmo de escolher ferramenta.\n\nPositione-se como parceiro estratégico: \"Antes de definir a solução, vamos entender o cenário humano. Isso evita surpresas e protege o investimento.\""
+  },
+  {
+    title: "Busca por Tecnologia",
+    subtitle: "(cliente procura parceiro / Meta entra)",
+    icon: "🔎",
+    // ▼▼▼ SUBSTITUA PELO NOME DO SEU VÍDEO DA FASE 2 ▼▼▼
+    video: "fase2-tecnologia.mp4",
+    acontecendo: "Cliente chega com demanda de tecnologia (SAP, automação, plataforma), comparando fornecedores e soluções.",
+    sinais: [
+      "\"Precisamos de uma solução SAP/ERP.\"",
+      "\"Quero automatizar e reduzir FTE.\"",
+      "\"O time vai ter que se adaptar, mas a gente vê isso depois.\"",
+      "\"Treinamento a gente resolve no fim.\""
+    ],
+    risco: "Escolha técnica desconectada da operação; baixa adesão; retrabalho; percepção de 'projeto imposto'.",
+    oportunidade: "Estratégia de mudança dentro do discovery: narrativa, plano macro de comunicação, entendimento de impactos por área, alinhamento com liderança.",
+    discovery: [
+      "Quais times vão mudar mais no dia a dia com essa solução?",
+      "Como você vai medir se a mudança deu certo (além do go-live)?",
+      "Quem na liderança garante prioridade e adesão?",
+      "Qual é a principal preocupação do time hoje?",
+      "Existe medo de perda de função ou de aumento de controle?"
+    ],
+    posicionamento: "Posicione GMO como parte do desenho da solução: \"a Meta entrega tecnologia com adoção\". Mostre que isso evita desperdício e acelera ROI.\n\nReforce: \"Quando o time entende o porquê e o como, a curva de adoção é mais rápida e o retorno vem antes.\""
+  },
+  {
+    title: "Desenho da Solução",
+    subtitle: "(workshops e definição do projeto)",
+    icon: "✏️",
+    // ▼▼▼ SUBSTITUA PELO NOME DO SEU VÍDEO DA FASE 3 ▼▼▼
+    video: "fase3-desenho.mp4",
+    acontecendo: "Workshops, mapeamento de processo, backlog, arquitetura, definição de rollout e times envolvidos.",
+    sinais: [
+      "\"A operação está com pouco tempo pra participar.\"",
+      "\"Cada área quer um jeito diferente.\"",
+      "\"Se mudar isso, vai dar confusão.\"",
+      "\"Não temos dono claro do processo.\""
+    ],
+    risco: "Desenho desalinhado; decisões sem adesão; resistência por falta de participação; exceções ignoradas.",
+    oportunidade: "Plano de mudança detalhado: stakeholder map, plano de comunicação por público, plano de capacitação, estratégia de rede de agentes da mudança.",
+    discovery: [
+      "Quem decide quando existe conflito entre áreas?",
+      "Quais exceções operacionais podem travar a adoção?",
+      "Quais mensagens precisam ser reforçadas pela liderança?",
+      "Quem pode ser agente da mudança na operação?",
+      "Que tipo de treinamento é realmente útil no dia a dia?"
+    ],
+    posicionamento: "GMO aqui garante alinhamento e reduz retrabalho no desenho. \"Sem adesão no desenho, você paga duas vezes na implementação.\"\n\nMostre que envolver as áreas desde o início reduz exceções não previstas e acelera a homologação."
+  },
+  {
+    title: "Implementação / Rollout",
+    subtitle: "(execução e preparação)",
+    icon: "🚧",
+    // ▼▼▼ SUBSTITUA PELO NOME DO SEU VÍDEO DA FASE 4 ▼▼▼
+    video: "fase4-implementacao.mp4",
+    acontecendo: "Configuração/implantação, testes, preparação de usuários, mudança de rotina, comunicação do go-live.",
+    sinais: [
+      "\"Não dá tempo de treinar todo mundo.\"",
+      "\"O go-live está em cima e o time tá perdido.\"",
+      "\"A operação não pode parar.\"",
+      "\"Vão jogar isso pra gente de um dia pro outro.\""
+    ],
+    risco: "Pânico operacional, erros, aumento de chamados, rejeição da ferramenta/processo, queda de produtividade.",
+    oportunidade: "Plano de comunicação de cutover, treinamento prático, materiais rápidos (job aids), suporte hiper-care, gestão de resistência.",
+    discovery: [
+      "Quais atividades não podem falhar no go-live?",
+      "Quem precisa de treinamento prático primeiro?",
+      "Qual o plano de suporte nas primeiras 2 semanas?",
+      "Quais mudanças de rotina são mais sensíveis?",
+      "Como vamos lidar com resistência explícita?"
+    ],
+    posicionamento: "GMO reduz risco de queda operacional e protege reputação do projeto. \"A implementação é técnica; o rollout é humano.\"\n\nReforce que um rollout bem gerido evita escalações, protege a relação com o sponsor e garante a percepção de sucesso."
+  },
+  {
+    title: "Adoção Real",
+    subtitle: "(pós go-live e mudança no dia a dia)",
+    icon: "🎯",
+    // ▼▼▼ SUBSTITUA PELO NOME DO SEU VÍDEO DA FASE 5 ▼▼▼
+    video: "fase5-adocao.mp4",
+    acontecendo: "Uso real, ajustes, performance, usuários criando atalhos, planilhas paralelas, dúvidas recorrentes.",
+    sinais: [
+      "\"O sistema é bom, mas ninguém usa direito.\"",
+      "\"Voltamos pra planilha porque é mais rápido.\"",
+      "\"A equipe está burlando o novo processo.\"",
+      "\"Sem o antigo eu não consigo.\""
+    ],
+    risco: "Benefícios não aparecem, retrabalho, baixa qualidade, questionamento do investimento, volta ao estado anterior.",
+    oportunidade: "Gestão de adoção: métricas de uso, reforço de liderança, coaching, ajustes de processo, campanhas de adesão.",
+    discovery: [
+      "Quais são os principais motivos do time evitar o novo?",
+      "O que seria 'sucesso' na prática do dia a dia?",
+      "Quais indicadores mostram adoção (uso, qualidade, tempo)?",
+      "Quem influencia o comportamento do time?",
+      "Que ajustes rápidos destravam a operação?"
+    ],
+    posicionamento: "GMO aqui é captura de valor: \"sem adoção, não existe ROI\". Aponte que a Meta sustenta a mudança até virar rotina.\n\nMostre dados: projetos com gestão de adoção ativa têm taxa de uso 3x maior nos primeiros 90 dias."
+  },
+  {
+    title: "Sustentação / Captura de Valor",
+    subtitle: "(benefícios e escala)",
+    icon: "🏗️",
+    // ▼▼▼ SUBSTITUA PELO NOME DO SEU VÍDEO DA FASE 6 ▼▼▼
+    video: "fase6-sustentacao.mp4",
+    acontecendo: "Estabilização, expansão, melhoria contínua, padronização, cultura de uso, replicação para outras áreas.",
+    sinais: [
+      "\"No começo funcionou, depois caiu.\"",
+      "\"O projeto foi entregue, mas não virou padrão.\"",
+      "\"Cada área adaptou do seu jeito.\"",
+      "\"Precisamos escalar para outras unidades.\""
+    ],
+    risco: "Efeito sanfona, perda de ganhos, variação, governança fraca, retorno de práticas antigas.",
+    oportunidade: "Sustentação: governança de mudança, rituais, comunicação contínua, treinamento recorrente, lições aprendidas, scaling playbook.",
+    discovery: [
+      "Como vocês garantem que isso vire padrão?",
+      "Quem é responsável por manter e evoluir o processo?",
+      "Que rituais e indicadores vão sustentar o comportamento?",
+      "Como vamos escalar sem perder consistência?",
+      "Quais lições aprendidas precisam virar padrão?"
+    ],
+    posicionamento: "GMO como motor de escala: \"capturar valor e manter ganhos é tão crítico quanto implementar\". Mostre que sustentação evita regressão e acelera expansão.\n\nApresente a sustentação como uma vantagem competitiva: quem mantém, escala. Quem não mantém, reimplementa."
+  }
+];
+
+const sectionConfig = [
+  { key:"acontecendo", label:"O que está acontecendo com o cliente", type:"text" },
+  { key:"sinais", label:"Sinais e frases reais do cliente", type:"quotes" },
+  { key:"risco", label:"Risco de não atuar com GMO", type:"text" },
+  { key:"oportunidade", label:"Oportunidade de GMO nesta fase", type:"text" },
+  { key:"discovery", label:"Perguntas de discovery (para o comercial)", type:"list", copyable:true, copyLabel:"Copiar perguntas de discovery" },
+  { key:"posicionamento", label:"Argumento de posicionamento", type:"paragraphs", copyable:true, copyLabel:"Copiar argumento de posicionamento" },
+];
+
+let current = 0;
+const track = document.getElementById('track');
+const progressBar = document.getElementById('progressBar');
+const card = document.getElementById('card');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const counter = document.getElementById('stepCounter');
+const toast = document.getElementById('toast');
+const isVertical = () => window.innerWidth <= 768;
+
+phases.forEach((p, i) => {
+  const btn = document.createElement('button');
+  btn.className = 'step-btn';
+  btn.setAttribute('role','tab');
+  btn.setAttribute('aria-selected','false');
+  btn.setAttribute('data-i', i);
+  btn.setAttribute('tabindex', i === 0 ? '0' : '-1');
+  btn.innerHTML = `<span class="step-num"><span class="emoji">${p.icon}</span></span><span class="step-label">${p.title}</span>`;
+  btn.addEventListener('click', () => goTo(i));
+  track.appendChild(btn);
+});
+
+function goTo(index) {
+  current = index;
+  const btns = document.querySelectorAll('.step-btn');
+  btns.forEach((b, i) => {
+    b.classList.remove('active','visited');
+    b.setAttribute('aria-selected','false');
+    b.setAttribute('tabindex','-1');
+    if (i < index) b.classList.add('visited');
+    if (i === index) {
+      b.classList.add('active');
+      b.setAttribute('aria-selected','true');
+      b.setAttribute('tabindex','0');
+      b.focus();
+    }
+  });
+  updateProgress(index);
+  renderCard(index);
+  prevBtn.disabled = index === 0;
+  nextBtn.disabled = index === phases.length - 1;
+  counter.textContent = `Fase ${index + 1} de ${phases.length}`;
+}
+
+function updateProgress(index) {
+  const btns = document.querySelectorAll('.step-btn');
+  const colors = ['var(--phase1)','var(--phase2)','var(--phase3)','var(--phase4)','var(--phase5)','var(--phase6)'];
+  if (isVertical()) {
+    if (index === 0) { progressBar.style.height = '0'; progressBar.style.width = '2px'; return; }
+    const first = btns[0].querySelector('.step-num');
+    const active = btns[index].querySelector('.step-num');
+    const top = first.getBoundingClientRect().top + first.offsetHeight / 2;
+    const bot = active.getBoundingClientRect().top + active.offsetHeight / 2;
+    progressBar.style.width = '2px';
+    progressBar.style.height = (bot - top) + 'px';
+  } else {
+    if (index === 0) { progressBar.style.width = '0'; return; }
+    const trackRect = track.getBoundingClientRect();
+    const firstC = btns[0].querySelector('.step-num');
+    const activeC = btns[index].querySelector('.step-num');
+    const startX = firstC.getBoundingClientRect().left + firstC.offsetWidth / 2 - trackRect.left;
+    const endX = activeC.getBoundingClientRect().left + activeC.offsetWidth / 2 - trackRect.left;
+    progressBar.style.left = startX + 'px';
+    progressBar.style.width = (endX - startX) + 'px';
+  }
+  progressBar.style.background = colors[index];
+}
+
+function renderCard(index) {
+  card.classList.remove('visible');
+  setTimeout(() => {
+    const p = phases[index];
+    let html = `<div class="card-top-bar"></div>
+      <div class="card-header">
+        <span class="card-phase-tag">Fase ${index + 1} de ${phases.length}</span>
+        <h2 class="card-title">${p.title} <span style="font-weight:400;font-size:.82em;color:var(--text-muted)">${p.subtitle}</span></h2>
+      </div>
+      <div class="card-body"><div class="section-grid">`;
+
+    sectionConfig.forEach(sec => {
+      const data = p[sec.key];
+      const fullClass = (sec.key === 'posicionamento' || sec.key === 'discovery') ? ' full-width' : '';
+      html += `<div class="sec${fullClass}">`;
+      html += `<div class="sec-title">${sec.label}</div>`;
+
+      if (sec.type === 'text') {
+        html += `<p>${data}</p>`;
+      } else if (sec.type === 'quotes') {
+        html += '<ul>' + data.map(q => `<li><em>${q}</em></li>`).join('') + '</ul>';
+      } else if (sec.type === 'list') {
+        html += '<ul>' + data.map(q => `<li>${q}</li>`).join('') + '</ul>';
+      } else if (sec.type === 'paragraphs') {
+        html += data.split('\n\n').map(pg => `<p style="margin-bottom:.5rem">${pg}</p>`).join('');
+      }
+
+      if (sec.copyable) {
+        html += `<button class="copy-btn" data-key="${sec.key}" data-index="${index}">Copiar: ${sec.copyLabel}</button>`;
+      }
+      html += '</div>';
+    });
+
+    // Vídeo da fase — dentro do card como seção
+    html += `<div class="sec sec-video full-width">
+      <div class="sec-title">Vídeo da fase</div>
+      <div class="video-wrapper">
+        <video controls preload="metadata">
+          <source src="${p.video}" type="video/mp4">
+          Seu navegador não suporta vídeo HTML5.
+        </video>
+      </div>
+    </div>`;
+
+    html += '</div></div>';
+    card.setAttribute('data-c', index);
+    card.innerHTML = html;
+    card.querySelectorAll('.copy-btn').forEach(btn => btn.addEventListener('click', handleCopy));
+    requestAnimationFrame(() => card.classList.add('visible'));
+  }, 180);
+}
+
+function handleCopy(e) {
+  const btn = e.currentTarget;
+  const key = btn.dataset.key;
+  const idx = parseInt(btn.dataset.index);
+  const p = phases[idx];
+  let text = '';
+  if (key === 'discovery') text = p.discovery.map((q, i) => `${i + 1}. ${q}`).join('\n');
+  else if (key === 'posicionamento') text = p.posicionamento;
+
+  navigator.clipboard.writeText(text).then(() => {
+    btn.classList.add('copied');
+    btn.textContent = '✓ Copiado!';
+    showToast('Conteúdo copiado para a área de transferência!');
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      const sec = sectionConfig.find(s => s.key === key);
+      btn.textContent = `Copiar: ${sec.copyLabel}`;
+    }, 2000);
+  }).catch(() => showToast('Erro ao copiar. Tente novamente.'));
+}
+
+function showToast(msg) {
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2200);
+}
+
+prevBtn.addEventListener('click', () => { if (current > 0) goTo(current - 1); });
+nextBtn.addEventListener('click', () => { if (current < phases.length - 1) goTo(current + 1); });
+
+track.addEventListener('keydown', e => {
+  const vert = isVertical();
+  const prev = vert ? 'ArrowUp' : 'ArrowLeft';
+  const next = vert ? 'ArrowDown' : 'ArrowRight';
+  if (e.key === next && current < phases.length - 1) { e.preventDefault(); goTo(current + 1); }
+  if (e.key === prev && current > 0) { e.preventDefault(); goTo(current - 1); }
+  if (e.key === 'Home') { e.preventDefault(); goTo(0); }
+  if (e.key === 'End') { e.preventDefault(); goTo(phases.length - 1); }
+});
+
+goTo(0);
+window.addEventListener('resize', () => updateProgress(current));
+</script>
+</body>
+</html>
