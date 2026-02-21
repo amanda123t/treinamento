@@ -261,25 +261,6 @@ body{
   color:var(--text);
 }
 
-/* NEXT STEP BLOCK */
-.next-step-block{
-  grid-column:1/-1;
-  display:flex;align-items:center;gap:1rem;
-  padding:1.1rem 1.4rem;
-  border-radius:var(--radius-sm);
-}
-.card[data-c="0"] .next-step-block{background:var(--phase1-bg);border-left:4px solid var(--phase1)}
-.card[data-c="1"] .next-step-block{background:var(--phase2-bg);border-left:4px solid var(--phase2)}
-.card[data-c="2"] .next-step-block{background:var(--phase3-bg);border-left:4px solid var(--phase3)}
-.card[data-c="3"] .next-step-block{background:var(--phase4-bg);border-left:4px solid var(--phase4)}
-.card[data-c="4"] .next-step-block{background:var(--phase5-bg);border-left:4px solid var(--phase5)}
-.card[data-c="5"] .next-step-block{background:var(--phase6-bg);border-left:4px solid var(--phase6)}
-.next-step-block .ns-icon{font-size:1.4rem}
-.next-step-block .ns-content{display:flex;flex-direction:column;gap:.15rem}
-.next-step-block .ns-label{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted)}
-.next-step-block .ns-action{font-size:.92rem;font-weight:700;color:var(--text)}
-.next-step-block .ns-output{font-size:.85rem;color:var(--text-secondary)}
-
 /* COPY BTN */
 .copy-btn{
   display:inline-flex;align-items:center;gap:.35rem;
@@ -699,14 +680,7 @@ html += `
   <video controls width="100%" style="border-radius:10px;margin-top:8px">
     <source src="${videos[index]}" type="video/mp4">
   </video>
-</div>; "next-step-block">
-        <span class="ns-icon">➡️</span>
-        <div class="ns-content">
-          <span class="ns-label">Próximo passo recomendado</span>
-          <span class="ns-action">${p.proximoPasso.acao}</span>
-          <span class="ns-output">Entregável: ${p.proximoPasso.output}</span>
-        </div>
-      </div>`;
+</div>;
 
     html += '</div></div>';
     card.setAttribute('data-c', index);
