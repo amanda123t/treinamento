@@ -3,67 +3,91 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Jornada GMO</title>
-
+<title>Jornada Comercial de GMO</title>
 <style>
-body{font-family:Arial;margin:0;background:#f5f5f5}
-.header{padding:30px;text-align:center;background:#111;color:white}
-.timeline{display:flex;gap:10px;overflow:auto;padding:20px}
-.step{background:white;border-radius:10px;padding:10px 14px;cursor:pointer;border:1px solid #ddd}
-.card{background:white;margin:20px;border-radius:14px;padding:20px}
-button{padding:10px 16px;border:none;border-radius:8px;background:#2563eb;color:white;cursor:pointer}
+body{font-family:Arial;background:#f6f5f1;margin:0;padding:0}
+.header{text-align:center;padding:30px;background:white;border-bottom:1px solid #ddd}
+.main{max-width:900px;margin:20px auto;padding:20px}
+.card{background:white;padding:20px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+button{padding:10px 15px;border:none;background:#2563eb;color:white;border-radius:6px;cursor:pointer}
+.timeline{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px}
+.step{padding:8px 12px;background:#eee;border-radius:6px;cursor:pointer}
+.step.active{background:#2563eb;color:white}
+
+/* VIDEO MODAL */
+#videoModal{
+display:none;
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.7);
+align-items:center;
+justify-content:center;
+z-index:9999
+}
+#videoModalContent{
+background:white;
+padding:20px;
+border-radius:12px;
+max-width:800px;
+width:90%
+}
+video{width:100%}
 </style>
 </head>
 
 <body>
 
-<div class="header">
-<h2>Jornada Comercial de GMO</h2>
-</div>
+<header class="header">
+<h1>Jornada Comercial de GMO</h1>
+<p>Clique na fase para entender o momento do cliente e assistir o vídeo</p>
+</header>
+
+<main class="main">
 
 <div class="timeline" id="timeline"></div>
-
 <div class="card" id="card"></div>
 
-<!-- MODAL VIDEO -->
-<div id="modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);align-items:center;justify-content:center">
-  <div style="background:white;padding:20px;border-radius:12px;max-width:800px;width:90%">
-    <button onclick="closeVideo()">Fechar</button>
-    <video id="videoPlayer" controls style="width:100%"></video>
-  </div>
+</main>
+
+<!-- VIDEO MODAL -->
+<div id="videoModal">
+<div id="videoModalContent">
+<button onclick="closeVideo()">Fechar</button>
+<video id="videoPlayer" controls></video>
+</div>
 </div>
 
 <script>
 const phases=[
 {
-title:"Oportunidade",
-text:"Cliente percebe necessidade de transformação",
-video:"videos/GMO.mp4"
+title:"Oportunidade de Transformação",
+video:"videos/GMO.mp4",
+text:"Cliente percebe necessidade de mudança, mas ainda não estruturou projeto."
 },
 {
-title:"Busca tecnologia",
-text:"Cliente procura solução SAP/automação",
-video:"videos/GMOENGAJAMENTO.mp4"
+title:"Busca por Tecnologia",
+video:"videos/GMOENGAJAMENTO.mp4",
+text:"Cliente busca solução sem considerar impacto humano."
 },
 {
-title:"Desenho",
-text:"Workshops e definição",
-video:"videos/GMOENGAJAMENTO.mp4"
+title:"Desenho da Solução",
+video:"videos/GMOENGAJAMENTO.mp4",
+text:"Workshops e decisões com risco de desalinhamento."
 },
 {
 title:"Implementação",
-text:"Execução e rollout",
-video:"videos/GMORESIST.mp4"
+video:"videos/GMORESIST.mp4",
+text:"Momento crítico de ansiedade e resistência."
 },
 {
 title:"Adoção",
-text:"Uso real e resistência",
-video:"videos/GMOADOCACAO.mp4"
+video:"videos/GMOADOCACAO.mp4",
+text:"Usuários criando atalhos e baixa adesão."
 },
 {
 title:"Sustentação",
-text:"Escala e captura de valor",
-video:"videos/GMOADOCACAO.mp4"
+video:"videos/GMOADOCACAO.mp4",
+text:"Risco de regressão e perda de valor."
 }
 ]
 
@@ -79,23 +103,27 @@ timeline.appendChild(el)
 })
 
 function render(i){
+document.querySelectorAll(".step").forEach(s=>s.classList.remove("active"))
+document.querySelectorAll(".step")[i].classList.add("active")
+
 const p=phases[i]
 card.innerHTML=`
-<h3>${p.title}</h3>
+<h2>${p.title}</h2>
 <p>${p.text}</p>
+<br>
 <button onclick="openVideo('${p.video}')">▶ Ver vídeo</button>
 `
 }
 
 function openVideo(src){
-const modal=document.getElementById("modal")
+const modal=document.getElementById("videoModal")
 const vid=document.getElementById("videoPlayer")
 vid.src=src
 modal.style.display="flex"
 }
 
 function closeVideo(){
-const modal=document.getElementById("modal")
+const modal=document.getElementById("videoModal")
 const vid=document.getElementById("videoPlayer")
 vid.pause()
 vid.src=""
