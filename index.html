@@ -681,7 +681,25 @@ function renderCard(index) {
     });
 
     // Next step block
-    html += `
+    html += ` const videos = [
+  "videos/GMO.mp4",
+  "videos/GMUD.mp4",
+  "videos/GMUD.mp4",
+  "videos/GMOD.mp4",
+  "videos/GMO.mp4",
+  "videos/GMO.mp4"
+];
+
+html += `
+<div class="sec full-width">
+  <div class="sec-header">
+    <span class="sec-icon">🎬</span>
+    <span class="sec-title">Vídeo da fase</span>
+  </div>
+  <video controls width="100%" style="border-radius:10px;margin-top:8px">
+    <source src="${videos[index]}" type="video/mp4">
+  </video>
+</div>;
       <div class="next-step-block">
         <span class="ns-icon">➡️</span>
         <div class="ns-content">
