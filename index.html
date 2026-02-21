@@ -3,134 +3,73 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Jornada Comercial de GMO</title>
-<style>
-body{font-family:Arial;background:#f6f5f1;margin:0;padding:0}
-.header{text-align:center;padding:30px;background:white;border-bottom:1px solid #ddd}
-.main{max-width:900px;margin:20px auto;padding:20px}
-.card{background:white;padding:20px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,.1)}
-button{padding:10px 15px;border:none;background:#2563eb;color:white;border-radius:6px;cursor:pointer}
-.timeline{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px}
-.step{padding:8px 12px;background:#eee;border-radius:6px;cursor:pointer}
-.step.active{background:#2563eb;color:white}
+<title>Jornada Comercial GMO</title>
 
-/* VIDEO MODAL */
-#videoModal{
-display:none;
-position:fixed;
-inset:0;
-background:rgba(0,0,0,.7);
-align-items:center;
-justify-content:center;
-z-index:9999
-}
-#videoModalContent{
-background:white;
-padding:20px;
-border-radius:12px;
-max-width:800px;
-width:90%
-}
-video{width:100%}
+<style>
+body{font-family:Arial;padding:40px;background:#f5f5f5}
+.card{background:#fff;padding:20px;border-radius:12px;margin-bottom:20px;box-shadow:0 4px 12px rgba(0,0,0,.08)}
+button{padding:10px 16px;border:none;border-radius:8px;background:#2563eb;color:#fff;font-weight:600;cursor:pointer}
+button:hover{opacity:.9}
+
+/* POPUP */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:.3s}
+.modal.active{opacity:1;pointer-events:auto}
+.modal-content{background:#000;padding:10px;border-radius:12px;max-width:700px;width:90%}
+.close{color:#fff;cursor:pointer;font-size:20px;text-align:right;margin-bottom:6px}
+video{width:100%;border-radius:10px}
 </style>
 </head>
 
 <body>
 
-<header class="header">
 <h1>Jornada Comercial de GMO</h1>
-<p>Clique na fase para entender o momento do cliente e assistir o vídeo</p>
-</header>
 
-<main class="main">
+<div class="card">
+<h3>Resistência silenciosa</h3>
+<p>Cliente não verbaliza rejeição, mas posterga adoção.</p>
+<button onclick="openVideo('videos/resistencia_silenciosa.mp4')">Ver vídeo</button>
+</div>
 
-<div class="timeline" id="timeline"></div>
-<div class="card" id="card"></div>
+<div class="card">
+<h3>Falta de engajamento</h3>
+<p>Time entende a mudança, mas não prioriza.</p>
+<button onclick="openVideo('videos/falta_engajamento.mp4')">Ver vídeo</button>
+</div>
 
-</main>
+<div class="card">
+<h3>Falta de patrocínio</h3>
+<p>Liderança não sustenta a mudança.</p>
+<button onclick="openVideo('videos/falta_patroncinio.mp4')">Ver vídeo</button>
+</div>
 
-<!-- VIDEO MODAL -->
-<div id="videoModal">
-<div id="videoModalContent">
-<button onclick="closeVideo()">Fechar</button>
-<video id="videoPlayer" controls></video>
+<div class="card">
+<h3>Comunicação ruim</h3>
+<p>Mensagens inconsistentes geram insegurança.</p>
+<button onclick="openVideo('videos/comunicacao_ruim.mp4')">Ver vídeo</button>
+</div>
+
+<!-- MODAL -->
+<div id="modal" class="modal">
+<div class="modal-content">
+<div class="close" onclick="closeVideo()">✖</div>
+<video id="player" controls></video>
 </div>
 </div>
 
 <script>
-const phases=[
-{
-title:"Oportunidade de Transformação",
-video:"videos/GMO.mp4",
-text:"Cliente percebe necessidade de mudança, mas ainda não estruturou projeto."
-},
-{
-title:"Busca por Tecnologia",
-video:"videos/GMOENGAJAMENTO.mp4",
-text:"Cliente busca solução sem considerar impacto humano."
-},
-{
-title:"Desenho da Solução",
-video:"videos/GMOENGAJAMENTO.mp4",
-text:"Workshops e decisões com risco de desalinhamento."
-},
-{
-title:"Implementação",
-video:"videos/GMORESIST.mp4",
-text:"Momento crítico de ansiedade e resistência."
-},
-{
-title:"Adoção",
-video:"videos/GMOADOCACAO.mp4",
-text:"Usuários criando atalhos e baixa adesão."
-},
-{
-title:"Sustentação",
-video:"videos/GMOADOCACAO.mp4",
-text:"Risco de regressão e perda de valor."
-}
-]
-
-const timeline=document.getElementById("timeline")
-const card=document.getElementById("card")
-
-phases.forEach((p,i)=>{
-const el=document.createElement("div")
-el.className="step"
-el.innerText=p.title
-el.onclick=()=>render(i)
-timeline.appendChild(el)
-})
-
-function render(i){
-document.querySelectorAll(".step").forEach(s=>s.classList.remove("active"))
-document.querySelectorAll(".step")[i].classList.add("active")
-
-const p=phases[i]
-card.innerHTML=`
-<h2>${p.title}</h2>
-<p>${p.text}</p>
-<br>
-<button onclick="openVideo('${p.video}')">▶ Ver vídeo</button>
-`
-}
-
 function openVideo(src){
-const modal=document.getElementById("videoModal")
-const vid=document.getElementById("videoPlayer")
-vid.src=src
-modal.style.display="flex"
+  const modal=document.getElementById('modal')
+  const player=document.getElementById('player')
+  player.src=src
+  modal.classList.add('active')
 }
-
 function closeVideo(){
-const modal=document.getElementById("videoModal")
-const vid=document.getElementById("videoPlayer")
-vid.pause()
-vid.src=""
-modal.style.display="none"
+  const modal=document.getElementById('modal')
+  const player=document.getElementById('player')
+  player.pause()
+  player.src=''
+  modal.classList.remove('active')
 }
-
-render(0)
 </script>
 
 </body>
